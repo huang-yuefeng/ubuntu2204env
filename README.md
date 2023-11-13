@@ -17,8 +17,8 @@ Use `docker save -o` instead of `docker export` in order to update image layer b
 
 ### download pieces and decompress to the original image in the internet access denied environment.
 
-```cat PIECE_NAME.* >> IMAGE_NAME.tar.gz
-tar zxvf IMAGE_NAME.tar.gz ```
+```cat PIECE_NAME.* >> IMAGE_NAME.tar.gz```
+```tar zxvf IMAGE_NAME.tar.gz ```
 
 ## Update docker images
 
