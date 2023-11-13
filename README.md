@@ -15,7 +15,7 @@ ps: morening, lunch, and evening will be good time to git push big files. Do tru
 Use `docker save -o` instead of `docker export` in order to update image layer by layer. 
 
 
-### download pieces and decompress to the original image in the internet access denied environment.
+### download pieces and decompress to the original image in the internet access denied environment. Use browser to download source code in zip or tar.gz format.
 
 ```cat PIECE_NAME.* >> IMAGE_NAME.tar.gz```
 
