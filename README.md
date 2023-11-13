@@ -18,12 +18,16 @@ Use `docker save -o` instead of `docker export` in order to update image layer b
 ### download pieces and decompress to the original image in the internet access denied environment.
 
 ```cat PIECE_NAME.* >> IMAGE_NAME.tar.gz```
+
 ```tar zxvf IMAGE_NAME.tar.gz ```
 
 ## Update docker images
 
-Where there should be updates to you environment, just update in the internet available environment and transfer the layer containing the updates inside. If your generate the new image by `docer save -o`, you can use diff.py to get the different layer. Follow the above method to transfer this different layer.
+Where there should be updates to you environment, just update in the internet available environment and transfer the layer containing the updates inside. If your generate the new image by `docer save -o`, you can use diff.py to get the diffrentiated layer. Follow the above method to transfer this diffrentiated layer.
+
 ```python diff.py -o IMAGE_NAME:OLD_TAG  -n IMAGE_NAME:NEW_TAG```
+
+
 
 
 
