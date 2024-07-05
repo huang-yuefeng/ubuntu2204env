@@ -1,8 +1,9 @@
 # encoding=utf8
 #python diff.py -o 镜像名:旧tag  -n 镜像名:新tag
 import sys
-reload(sys)
-sys.setdefaultencoding("utf8")
+#from importlib import reload
+#reload(sys)
+#sys.setdefaultencoding("utf8")
 
 import os
 import os.path
@@ -28,24 +29,24 @@ class DockerTool(object):
 
     def getMetadata(self, imageID, needPull=False):    
         tempId = imageID.replace(":","_").replace("/","_")
-	print(tempId)
+        print(tempId)
         filePath = "{}/{}/{}.tar".format(self.rootDir, self.tempDir, tempId)
-	print(filePath)
+        print(filePath)
 
         if needPull:
-            print "pull image: " + imageID
+            print ("pull image: " + imageID)
             ret = os.system("cd {} && docker pull {} && docker save -o {} {} ".format(self.rootDir, imageID, filePath, imageID))
         else:
             ret = os.system("cd {} && docker save -o {} {} ".format(self.rootDir, filePath, imageID))
 
         imageLaysDir = os.path.join(self.rootDir, self.tempDir, tempId)
-	print (imageLaysDir)
+        print (imageLaysDir)
 
         if not os.path.exists(imageLaysDir):
             os.system("mkdir -p %s" % imageLaysDir)
         ret = os.system("tar -xf %s  -C %s && ls -l |grep ^d  > /dev/null && rm -rf %s " % (filePath, imageLaysDir, filePath) )
         manifestFile = os.path.join(imageLaysDir, "manifest.json")
-	print ("manifest", manifestFile)
+        print ("manifest", manifestFile)
         maniData = {}
         with open(manifestFile, "r") as fd:
             rawdata = fd.read()
@@ -58,13 +59,13 @@ class DockerTool(object):
 
     def imageDiff(self, latestImageId, originImageId, pullImage):
 
-        print "old image: %s" % originImageId
+        print ("old image: %s" % originImageId)
         originMeta, originDir,originTag = self.getMetadata(originImageId, pullImage)
-	print (originMeta)
+        print (originMeta)
 
-        print "new image: %s" % latestImageId
+        print ("new image: %s" % latestImageId)
         latestMeta, imageLaysDir, imageTagId = self.getMetadata(latestImageId, pullImage)
-	print (latestMeta)
+        print (latestMeta)
 
         difflayers = []
         existLayers = []
@@ -77,8 +78,8 @@ class DockerTool(object):
             else:
                 existLayers.append(layerId)
 
-	print ("diff:", difflayers)
-	print ("exist:",existLayers)
+        print ("diff:", difflayers)
+        print ("exist:",existLayers)
         with open(existLayerFile, "w") as fd:
             for layer in existLayers:
                 fd.write(layer)
@@ -100,7 +101,7 @@ class DockerTool(object):
         cmdstr3 = "cd {} && mv {} {}".format(imageLaysDir, diffTarFilename, absRootPath)
         os.system(cmdstr3)
 
-        print "create success: " + absRootPath + "/" + diffTarFilename
+        print ("create success: " + absRootPath + "/" + diffTarFilename)
 
         cmdStr4 = "cd {} && rm -rf {}".format(absRootPath, self.tempDir)
         #os.system(cmdStr4)
@@ -120,7 +121,7 @@ if __name__ == '__main__':
     args = getArguments()
     tool = DockerTool(args.rootDir)
 
-    print "work dir is %s" % (tool.rootDir)
+    print ("work dir is %s" % (tool.rootDir))
 
     tool.imageDiff(args.newId, args.oldId, args.pullImage)
-    print "cost %s seconds !" % (time.time() - time0)
+    print ("cost %s seconds !" % (time.time() - time0))
